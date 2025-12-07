@@ -1,5 +1,3 @@
-
-
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
 import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
@@ -39,7 +37,7 @@ const { data: posts } = await useSanityQuery<SanityDocument[]>(POSTS_QUERY);
             :key="post._id"
             :title="post.title"
             :date="post.publishedAt"
-            :to="`/${post.slug.current}`"
+            :to="`/post/${post.slug.current}`"
             :image="post.image ? urlFor(post.image)!.width(500).url() : undefined"
           />
         </UBlogPosts>

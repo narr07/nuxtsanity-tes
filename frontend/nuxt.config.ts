@@ -16,7 +16,8 @@ export default defineNuxtConfig({
   routeRules: {
     // ISR: Regenerate page setiap 60 detik jika ada request
     '/': { isr: 60 },
-    '/**': { isr: 60 },
+    '/page/**': { isr: 60 },
+    '/post/**': { isr: 60 },
     // Disable SSR for Sanity Studio
     '/studio/**': { ssr: false }
   },

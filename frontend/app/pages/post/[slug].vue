@@ -36,7 +36,7 @@ useSeoMeta({
       <UPageHeader>
         <template #headline>
           <UButton
-            to="/"
+            to="/post"
             icon="i-lucide-arrow-left"
             color="neutral"
             variant="link"
