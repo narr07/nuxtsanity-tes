@@ -65,7 +65,7 @@ useSeoMeta({
 
       <template #right>
         <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
+          to="https://github.com/narr07/nuxtsanity-tes"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"
@@ -74,5 +74,8 @@ useSeoMeta({
         />
       </template>
     </UFooter>
+
+    <!-- Preview Mode Toast -->
+    <PreviewToast />
   </UApp>
 </template>
