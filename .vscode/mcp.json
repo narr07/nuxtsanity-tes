@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "nuxt-ui": {
+      "type": "http",
+      "url": "https://ui.nuxt.com/mcp"
+    },
+    "Sanity": {
+      "url": "https://mcp.sanity.io",
+      "type": "http"
+    }
+  }
+}
