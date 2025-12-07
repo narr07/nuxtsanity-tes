@@ -1,33 +1,40 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
-import { settingsQuery } from '~/utils/queries'
 
 const route = useRoute()
-const { data: settings } = useSanityQuery<any>(settingsQuery)
 
-// Debug: lihat data settings
-watchEffect(() => {
-  console.log('Settings data:', settings.value)
-})
+// Query inline langsung
+const SETTINGS_QUERY = groq`*[_type == "settings"][0]{
+  title,
+  navigation[]{
+    title,
+    linkType,
+    page->{slug},
+    post->{slug},
+    externalUrl
+  }
+}`
+
+const { data: settings } = useSanityQuery<any>(SETTINGS_QUERY)
 
 const items = computed<NavigationMenuItem[]>(() => {
   // Default navigation jika belum ada settings
-  const defaultNav = [
-    { label: 'Home', to: '/', active: route.path === '/' },
-    { label: 'Posts', to: '/post', active: route.path.startsWith('/post') }
-  ]
-
   if (!settings.value?.navigation || settings.value.navigation.length === 0) {
-    return defaultNav
+    return [
+      { label: 'Home', to: '/', active: route.path === '/' },
+      { label: 'Posts', to: '/post', active: route.path.startsWith('/post') }
+    ]
   }
 
   return settings.value.navigation.map((item: any) => {
     let to = '/'
 
+    // Resolve URL berdasarkan linkType
     if (item.linkType === 'page' && item.page?.slug?.current) {
       to = `/page/${item.page.slug.current}`
-    } else if (item.linkType === 'post' && item.post?.slug?.current) {
-      to = `/post/${item.post.slug.current}`
+    } else if (item.linkType === 'post') {
+      // Untuk linkType post, arahkan ke halaman list post
+      to = '/post'
     } else if (item.linkType === 'external' && item.externalUrl) {
       to = item.externalUrl
     }
@@ -35,22 +42,29 @@ const items = computed<NavigationMenuItem[]>(() => {
     return {
       label: item.title,
       to,
-      active: route.path === to || route.path.startsWith(to + '/')
+      active: route.path === to || (to !== '/' && route.path.startsWith(to))
     }
   })
 })
-
-console.log(settings.value)
 </script>
 
 <template>
-  <UHeader :title="settings?.siteTitle || settings?.title || 'My Site'">
-
-
+  <UHeader :title="settings?.title || 'My Site'">
     <UNavigationMenu :items="items" />
 
     <template #right>
       <UColorModeButton />
+
+      <!-- <UTooltip text="Open on GitHub" :kbds="['meta', 'G']">
+        <UButton
+          color="neutral"
+          variant="ghost"
+          to="https://github.com/nuxt/ui"
+          target="_blank"
+          icon="i-simple-icons-github"
+          aria-label="GitHub"
+        />
+      </UTooltip> -->
     </template>
 
     <template #body>
@@ -58,3 +72,4 @@ console.log(settings.value)
     </template>
   </UHeader>
 </template>
+

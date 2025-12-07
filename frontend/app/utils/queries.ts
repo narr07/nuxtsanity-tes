@@ -36,9 +36,7 @@ export const pageQuery = groq`*[_type == "page" && slug.current == $slug][0]{
   }
 }`
 
-// Query untuk settings - ambil yang pertama tanpa filter ID
-export const settingsQuery = groq`*[_type == "settings"] | order(_updatedAt desc)[0]{
-  _id,
+export const settingsQuery = groq`*[_type == "settings"][0]{
   siteTitle: title,
   description,
   logo,
